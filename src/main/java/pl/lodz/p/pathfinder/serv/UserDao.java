@@ -2,12 +2,15 @@ package pl.lodz.p.pathfinder.serv;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import pl.lodz.p.pathfinder.serv.model.PointOfInterest;
+import pl.lodz.p.pathfinder.serv.model.Trip;
 import pl.lodz.p.pathfinder.serv.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.HashSet;
 
 /**
  * Created by QDL on 2017-04-07.
@@ -36,7 +39,7 @@ public class UserDao
         }
         else
         {
-            User user = new User(googleID);
+            User user = new User(googleID,new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
             entityManager.persist(user);
             return user;
         }
