@@ -92,5 +92,21 @@ public class PoiDao
     }
 
 
+    public void removeFromFavorites(String poiId, String userID)
+    {
+        User u = userDao.getUser(userID);
+        PointOfInterest poi = getPoi(poiId);
+        u.getFavoritePois().remove(poi);
+    }
+
+
+    public void addToCreated(String poiId, String userID)
+    {
+        User u = userDao.getUser(userID);
+        PointOfInterest poi = new PointOfInterest(poiId,u);
+        u.getCreatedPois().add(poi);
+    }
+
+
 
 }

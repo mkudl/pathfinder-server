@@ -61,6 +61,9 @@ public class TripDao
 //        User asd = new User("userasdfg");
         User asd  = ud.getUser("108340409466362674557");
         Trip t = new Trip("asd","desc",asd,poi);
+
+        asd.getFavoriteTrips().add(t);
+
         getSession().persist(asd);
         getSession().persist(t);
 

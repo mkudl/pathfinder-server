@@ -36,6 +36,12 @@ public class PointOfInterest
         this.googleID = googleID;
     }
 
+    public PointOfInterest(String googleID, User createdByUser)
+    {
+        this.googleID = googleID;
+        this.createdByUser = createdByUser;
+    }
+
     public int getID()
     {
         return ID;

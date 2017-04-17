@@ -49,8 +49,8 @@ public class PoiController
     }
 
 
-    @RequestMapping(value = "/addFavorite", method = RequestMethod.PUT)
-    public void AddTripToFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+    @RequestMapping(value = "/addFavorite", method = RequestMethod.POST)
+    public void addPoiToFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
                                    @RequestParam(value = "poiGoogleId") String poiGoogleId)
     {
         String id = tokenVerifier.verifyToken(idToken);
@@ -60,4 +60,31 @@ public class PoiController
         }
         //TODO handle auth failure
     }
+
+
+    @RequestMapping(value = "/removeFavorite", method = RequestMethod.DELETE)
+    public void removePoiFromFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+                                   @RequestParam(value = "poiGoogleId") String poiGoogleId)
+    {
+        String id = tokenVerifier.verifyToken(idToken);
+        if(!id.isEmpty())
+        {
+            poiDao.removeFromFavorites(poiGoogleId,id);
+        }
+        //TODO handle auth failure
+    }
+
+
+    @RequestMapping(value = "/addCreated", method = RequestMethod.POST)
+    public void addPoiToCreated(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+                                  @RequestParam(value = "poiGoogleId") String poiGoogleId)
+    {
+        String id = tokenVerifier.verifyToken(idToken);
+        if(!id.isEmpty())
+        {
+            poiDao.addToCreated(poiGoogleId,id);
+        }
+        //TODO handle auth failure
+    }
+
 }
