@@ -1,10 +1,14 @@
 package pl.lodz.p.pathfinder.serv;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.pathfinder.serv.model.PointOfInterest;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -86,5 +90,25 @@ public class PoiController
         }
         //TODO handle auth failure
     }
+
+
+    @RequestMapping(value = "/checkFavorite", method = RequestMethod.GET)
+    public ResponseEntity<Map<String,Boolean>> checkUserFavorite(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+                                                 @RequestParam(value = "poiGoogleId") String poiGoogleId)
+    {
+        String id = tokenVerifier.verifyToken(idToken);
+        if(!id.isEmpty())
+        {
+            if (poiDao.getUserFavorites(id).contains(poiDao.getPoi(poiGoogleId)) ){
+                //can't return a primitive type and creating a wrapper seems like overkill, so it returns a map
+                return ResponseEntity.ok(Collections.singletonMap("isFavorite",true));
+            }
+            else {
+                return ResponseEntity.ok(Collections.singletonMap("isFavorite",false));
+            }
+        }
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
 
 }
