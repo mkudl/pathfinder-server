@@ -1,13 +1,17 @@
 package pl.lodz.p.pathfinder.serv;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.pathfinder.serv.model.Trip;
 import pl.lodz.p.pathfinder.serv.model.json.TokenJson;
 import pl.lodz.p.pathfinder.serv.model.json.TripJsonWrapper;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -88,7 +92,7 @@ public class TripController
 
     }
 
-    //TODO change mapping, too similar
+
     @RequestMapping(value = "/addFavorite", method = RequestMethod.PUT)
     public void AddTripToFavorites(@RequestBody TripJsonWrapper body)
     {
@@ -98,6 +102,39 @@ public class TripController
             tripDao.addToFavorites(body.getTrip(),id);
         }
         //TODO handle auth failure
+    }
+
+
+    @RequestMapping(value = "/removeFavorite", method = RequestMethod.DELETE)
+    public void RemoveTripFromFavorite(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+                                       @RequestParam(value = "tripID") int tripID)
+    {
+        String id = tokenVerifier.verifyToken(idToken);
+        if(!id.isEmpty())
+        {
+            tripDao.removeFromFavorites(tripDao.getTrip(tripID),id);
+        }
+        //TODO handle auth failure
+    }
+
+
+
+    @RequestMapping(value = "/checkFavorite", method = RequestMethod.GET)
+    public ResponseEntity<Map<String,Boolean>> checkUserFavorite(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+                                                                 @RequestParam(value = "tripID") int tripID)
+    {
+        String userID = tokenVerifier.verifyToken(idToken);
+        if(!userID.isEmpty())
+        {
+            if (tripDao.getUserFavorites(userID).contains(tripDao.getTrip(tripID)) ){
+                //can't return a primitive type and creating a wrapper seems like overkill, so it returns a map
+                return ResponseEntity.ok(Collections.singletonMap("isFavorite",true));
+            }
+            else {
+                return ResponseEntity.ok(Collections.singletonMap("isFavorite",false));
+            }
+        }
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 

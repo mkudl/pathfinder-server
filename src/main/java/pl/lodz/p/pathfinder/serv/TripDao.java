@@ -52,8 +52,8 @@ public class TripDao
     {
 //        return getSession().get(Trip.class,ID);
         List<String> poi = new ArrayList<>();
-        poi.add("ChIJWXvZPtw0GkcR5fe1V3RNltQ"); //FTIMS
         poi.add("ChIJ6eeBits0GkcR7SgkTf2RyNI"); //Willa Richtera
+        poi.add("ChIJWXvZPtw0GkcR5fe1V3RNltQ"); //FTIMS
         poi.add("ChIJtSZsQts0GkcRMLhAXQ-MuDA"); //katedra
         poi.add("ChIJDfShc7Y0GkcR82qC4o_ov_s"); //willa herbsta
         poi.add("ChIJUQ37xNrKG0cR3Txa5HBJf9Y"); //muzeum łodzi
@@ -132,6 +132,14 @@ public class TripDao
     }
 
 
+    public void deleteTrip(Trip trip, String userID)
+    {
+        //TODO verify that user is creator (just in case; can't trust frontend)
+        //TODO delete
+    }
+
+
+
     /**
      * Update an existing Trip with the new values of its Name, Description and Places
      * To be used only if trip is already saved in db
@@ -150,9 +158,16 @@ public class TripDao
 
     public void addToFavorites(Trip trip, String userID)
     {
-        User u = entityManager.find(User.class,userID);
+        User u = userDao.getUser(userID);
 //        u.getFavoriteTrips().stream().anyMatch( t -> t.getId()==trip.getId()) ? u.getFavoriteTrips().stream().filter( t -> t.getId() == trip.getId()).findFirst().get() : ;
         u.getFavoriteTrips().add(trip); //TODO check whether hibernate will merge duplicates and persist new trips
+    }
+
+    public void removeFromFavorites(Trip trip, String userID)
+    {
+        User u = userDao.getUser(userID);
+//        u.getFavoriteTrips().stream().anyMatch( t -> t.getId()==trip.getId()) ? u.getFavoriteTrips().stream().filter( t -> t.getId() == trip.getId()).findFirst().get() : ;
+        u.getFavoriteTrips().remove(trip); //TODO check whether hibernate will merge duplicates and persist new trips
     }
 
 
