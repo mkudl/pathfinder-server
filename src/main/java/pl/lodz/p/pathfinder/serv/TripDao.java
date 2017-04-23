@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by QDL on 2017-04-06.
@@ -156,18 +157,18 @@ public class TripDao
     }
 
 
-    public void addToFavorites(Trip trip, String userID)
+    public void addToFavorites(int tripID, String userID)
     {
         User u = userDao.getUser(userID);
-//        u.getFavoriteTrips().stream().anyMatch( t -> t.getId()==trip.getId()) ? u.getFavoriteTrips().stream().filter( t -> t.getId() == trip.getId()).findFirst().get() : ;
-        u.getFavoriteTrips().add(trip); //TODO check whether hibernate will merge duplicates and persist new trips
+        Trip newFavorite = entityManager.find(Trip.class,tripID);
+        u.getFavoriteTrips().add(newFavorite);
     }
 
-    public void removeFromFavorites(Trip trip, String userID)
+    public void removeFromFavorites(int tripID, String userID)
     {
         User u = userDao.getUser(userID);
-//        u.getFavoriteTrips().stream().anyMatch( t -> t.getId()==trip.getId()) ? u.getFavoriteTrips().stream().filter( t -> t.getId() == trip.getId()).findFirst().get() : ;
-        u.getFavoriteTrips().remove(trip); //TODO check whether hibernate will merge duplicates and persist new trips
+        Set<Trip> updatedFavorites = u.getFavoriteTrips().stream().filter( t -> t.getId() != tripID ).collect(Collectors.toSet());
+        u.setFavoriteTrips(updatedFavorites);
     }
 
 

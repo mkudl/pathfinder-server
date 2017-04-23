@@ -94,12 +94,13 @@ public class TripController
 
 
     @RequestMapping(value = "/addFavorite", method = RequestMethod.PUT)
-    public void AddTripToFavorites(@RequestBody TripJsonWrapper body)
+    public void AddTripToFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+                                   @RequestParam(value = "tripID") int tripID)
     {
-        String id = tokenVerifier.verifyToken(body.getIdToken());
+        String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            tripDao.addToFavorites(body.getTrip(),id);
+            tripDao.addToFavorites(tripID,id);
         }
         //TODO handle auth failure
     }
@@ -112,7 +113,7 @@ public class TripController
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            tripDao.removeFromFavorites(tripDao.getTrip(tripID),id);
+            tripDao.removeFromFavorites(tripID,id);
         }
         //TODO handle auth failure
     }
