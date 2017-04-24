@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.pathfinder.serv.model.Trip;
-import pl.lodz.p.pathfinder.serv.model.json.TokenJson;
 import pl.lodz.p.pathfinder.serv.model.json.TripJsonWrapper;
 
 import java.util.Collections;
