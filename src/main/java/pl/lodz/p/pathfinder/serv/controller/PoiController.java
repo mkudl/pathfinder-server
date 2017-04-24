@@ -1,10 +1,12 @@
-package pl.lodz.p.pathfinder.serv;
+package pl.lodz.p.pathfinder.serv.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.pathfinder.serv.TokenVerifier;
+import pl.lodz.p.pathfinder.serv.dao.PoiDao;
 import pl.lodz.p.pathfinder.serv.model.PointOfInterest;
 
 import java.util.Collections;

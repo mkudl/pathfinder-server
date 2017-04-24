@@ -1,8 +1,6 @@
-package pl.lodz.p.pathfinder.serv;
+package pl.lodz.p.pathfinder.serv.dao;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.criteria.internal.CriteriaBuilderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.lodz.p.pathfinder.serv.model.Trip;

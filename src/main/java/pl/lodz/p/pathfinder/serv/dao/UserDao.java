@@ -1,4 +1,4 @@
-package pl.lodz.p.pathfinder.serv;
+package pl.lodz.p.pathfinder.serv.dao;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
