@@ -25,10 +25,6 @@ import java.util.stream.Collectors;
 public class TripDao
 {
 
-//    @Autowired
-//    SessionFactory sessionFactory;
-
-//    @Autowired
     @PersistenceContext
     EntityManager entityManager;
 
@@ -46,47 +42,12 @@ public class TripDao
         return entityManager.unwrap(Session.class);
     }
 
-    //TODO test methods, remove
-    public Trip testmake()
-    {
-//        return getSession().get(Trip.class,ID);
-        List<String> poi = new ArrayList<>();
-        poi.add("ChIJ6eeBits0GkcR7SgkTf2RyNI"); //Willa Richtera
-        poi.add("ChIJWXvZPtw0GkcR5fe1V3RNltQ"); //FTIMS
-        poi.add("ChIJtSZsQts0GkcRMLhAXQ-MuDA"); //katedra
-        poi.add("ChIJDfShc7Y0GkcR82qC4o_ov_s"); //willa herbsta
-        poi.add("ChIJUQ37xNrKG0cR3Txa5HBJf9Y"); //muzeum łodzi
-
-//        User asd = new User("userasdfg");
-        User asd  = ud.getUser("108340409466362674557");
-        Trip t = new Trip("asd","desc",asd,poi);
-
-        asd.getFavoriteTrips().add(t);
-
-        getSession().persist(asd);
-        getSession().persist(t);
-
-
-        User asd2  = ud.getUser("userasdfghyrth");
-        Trip t2 = new Trip("asd","desc",asd,poi);
-        getSession().persist(asd2);
-        getSession().persist(t2);
-
-        return t;
-
-    }
 
     public Trip getTrip(int ID)
     {
         return entityManager.find(Trip.class,ID);
     }
 
-    //TODO test methods, remove
-    public List<Trip> getTrips()
-    {
-        return getSession().createCriteria(Trip.class).list();
-
-    }
 
 
     //TODO? create lists from sets and return lists
