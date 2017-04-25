@@ -2,6 +2,8 @@ package pl.lodz.p.pathfinder.serv.dao;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.pathfinder.serv.model.PointOfInterest;
 import pl.lodz.p.pathfinder.serv.model.Trip;
 import pl.lodz.p.pathfinder.serv.model.User;
@@ -52,7 +54,7 @@ public class UserDao
      * @param googleID
      * @return Number of entries with that ID in db
      */
-    public int getUserCount(String googleID)    //TODO? change access to private
+    private synchronized int getUserCount(String googleID)    //TODO? change access to private
     {
         Query query = entityManager.unwrap(Session.class).createQuery("select count(u) from User u where u.googleID = :gID");
         query.setParameter("gID",googleID);
