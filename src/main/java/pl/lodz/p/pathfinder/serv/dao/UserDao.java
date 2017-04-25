@@ -26,7 +26,7 @@ import java.util.HashSet;
 public class UserDao
 {
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
 
     /**

@@ -26,10 +26,15 @@ public class TripDao
 {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
+
+    private final UserDao userDao;
 
     @Autowired
-    UserDao userDao;
+    public TripDao(UserDao userDao)
+    {
+        this.userDao = userDao;
+    }
 
 
     private Session getSession()
@@ -38,12 +43,11 @@ public class TripDao
     }
 
 
+
     public Trip getTrip(int ID)
     {
         return entityManager.find(Trip.class,ID);
     }
-
-
 
     public Set<Trip> getAllByUser(String userID)
     {

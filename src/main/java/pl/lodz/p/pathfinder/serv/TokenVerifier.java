@@ -25,10 +25,15 @@ public class TokenVerifier
 {
     private final static String CLIENT_ID = "NOPE";
 
+    private final HttpTransport transport;
+    private final JsonFactory jsonFactory;
+
     @Autowired
-    private HttpTransport transport;
-    @Autowired
-    private JsonFactory jsonFactory;
+    public TokenVerifier(HttpTransport transport, JsonFactory jsonFactory)
+    {
+        this.transport = transport;
+        this.jsonFactory = jsonFactory;
+    }
 
     public String verifyToken(String idToken)
     {

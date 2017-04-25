@@ -26,12 +26,16 @@ import java.util.Set;
 public class TripController
 {
 
-    @Autowired
-    TripDao tripDao;
+    private final TripDao tripDao;
+
+    private final TokenVerifier tokenVerifier;
 
     @Autowired
-    TokenVerifier tokenVerifier;
-
+    public TripController(TripDao tripDao, TokenVerifier tokenVerifier)
+    {
+        this.tripDao = tripDao;
+        this.tokenVerifier = tokenVerifier;
+    }
 
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)

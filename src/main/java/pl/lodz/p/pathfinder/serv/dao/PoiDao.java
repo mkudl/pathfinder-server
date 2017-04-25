@@ -22,11 +22,16 @@ public class PoiDao
 
 
     @PersistenceContext
+    private
     EntityManager entityManager;
 
-    @Autowired
-    UserDao userDao;
+    private final UserDao userDao;
 
+    @Autowired
+    public PoiDao(UserDao userDao)
+    {
+        this.userDao = userDao;
+    }
 
 
     private Session getSession()

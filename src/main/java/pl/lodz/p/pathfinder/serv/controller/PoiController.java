@@ -24,13 +24,16 @@ import java.util.Set;
 public class PoiController
 {
 
-    @Autowired
-    PoiDao poiDao;
+    private final PoiDao poiDao;
+
+    private final TokenVerifier tokenVerifier;
 
     @Autowired
-    TokenVerifier tokenVerifier;
-
-
+    public PoiController(PoiDao poiDao, TokenVerifier tokenVerifier)
+    {
+        this.poiDao = poiDao;
+        this.tokenVerifier = tokenVerifier;
+    }
 
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
