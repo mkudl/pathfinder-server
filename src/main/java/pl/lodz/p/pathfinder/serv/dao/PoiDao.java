@@ -45,7 +45,7 @@ public class PoiDao
     {
         Session session = entityManager.unwrap(Session.class);
 
-        if(getUserCount(googleID)>0){
+        if(countPointsCreatedByUser(googleID)>0){
             return session.byNaturalId(PointOfInterest.class).using("googleID",googleID).load();
         }
         else
@@ -56,7 +56,7 @@ public class PoiDao
         }
     }
 
-    private int getUserCount(String googleID)
+    private int countPointsCreatedByUser(String googleID)
     {
         Query query = entityManager.unwrap(Session.class).createQuery("select count(p) from PointOfInterest p where p.googleID = :gID");
         query.setParameter("gID",googleID);
@@ -74,7 +74,8 @@ public class PoiDao
 
     public Set<PointOfInterest> getUserFavorites(String userID)
     {
-        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();
+//        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();
+        User u = userDao.getUser(userID);
         return u.getFavoritePois();
     }
 
