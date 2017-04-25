@@ -87,7 +87,7 @@ public class PoiDao
 
         PointOfInterest poi = getPoi(poiId);
 
-        u.getFavoritePois().add(poi); //TODO check whether hibernate will merge duplicates and persist new pois
+        u.getFavoritePois().add(poi);
     }
 
 

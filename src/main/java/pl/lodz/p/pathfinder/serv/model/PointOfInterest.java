@@ -24,7 +24,6 @@ public class PointOfInterest
 
     @ManyToOne
     @JsonIgnore
-    //TODO allow nulls for cases where a poi from the external api needs to be stored as a part of a favorites list
     private User createdByUser; //ID of the Google user that created this poi
 
     public PointOfInterest()

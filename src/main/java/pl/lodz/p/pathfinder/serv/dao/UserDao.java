@@ -54,7 +54,7 @@ public class UserDao
      * @param googleID
      * @return Number of entries with that ID in db
      */
-    private synchronized int getUserCount(String googleID)    //TODO? change access to private
+    private synchronized int getUserCount(String googleID)
     {
         Query query = entityManager.unwrap(Session.class).createQuery("select count(u) from User u where u.googleID = :gID");
         query.setParameter("gID",googleID);

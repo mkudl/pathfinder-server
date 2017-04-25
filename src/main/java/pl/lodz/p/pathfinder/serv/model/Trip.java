@@ -36,7 +36,6 @@ public class Trip
     @Fetch(FetchMode.SELECT)
     @JsonProperty("pointOfInterestList")
     private List<String> places; //Reference to the IDs of the places in Google APIs
-    //TODO? change to poi objects
 
 
     public Trip()
