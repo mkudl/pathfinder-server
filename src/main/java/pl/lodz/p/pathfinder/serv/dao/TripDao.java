@@ -32,13 +32,8 @@ public class TripDao
     UserDao userDao;
 
 
-    @Autowired
-            //TODO? DELETE?
-    UserDao ud;
-
     private Session getSession()
     {
-//        return sessionFactory.getCurrentSession();
         return entityManager.unwrap(Session.class);
     }
 
@@ -50,18 +45,16 @@ public class TripDao
 
 
 
-    //TODO? create lists from sets and return lists
     public Set<Trip> getAllByUser(String userID)
     {
-        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();  //FIXME get user from DAO
-//        User u = entityManager.find(User.class,userID);
+        User u = userDao.getUser(userID);
         if(u!=null) return u.getCreatedTrips();
         else return new HashSet<>();
     }
 
     public Set<Trip> getUserFavorites(String userID)
     {
-        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();  //FIXME get user from DAO
+        User u = userDao.getUser(userID);
         return u.getFavoriteTrips();
     }
 
@@ -91,14 +84,11 @@ public class TripDao
         entityManager.persist(trip);
     }
 
-
     public void deleteTrip(Trip trip, String userID)
     {
         //TODO verify that user is creator (just in case; can't trust frontend)
         //TODO delete
     }
-
-
 
     /**
      * Update an existing Trip with the new values of its Name, Description and Places
@@ -114,7 +104,6 @@ public class TripDao
         savedTrip.setPlaces(trip.getPlaces());
         entityManager.merge(savedTrip);
     }
-
 
     public void addToFavorites(int tripID, String userID)
     {
