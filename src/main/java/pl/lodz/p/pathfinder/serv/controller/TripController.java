@@ -34,91 +34,90 @@ public class TripController
 
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-//    @RequestMapping(value = "/getAll")
-    public Set<Trip> getAllByUser(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
+    public ResponseEntity<Set<Trip>> getAllByUser(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return tripDao.getAllByUser(id);
+            return ResponseEntity.ok(tripDao.getAllByUser(id));
         }
-        //TODO handle auth failure
-        return null;
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
+
 
     @RequestMapping(value = "/favorites", method = RequestMethod.GET)
-    public Set<Trip> getUserFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
+    public ResponseEntity<Set<Trip>> getUserFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return tripDao.getUserFavorites(id);
+            return ResponseEntity.ok(tripDao.getUserFavorites(id));
         }
-        //TODO handle auth failure
-        return null;
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
+
 
     @RequestMapping(value = "/recommended", method = RequestMethod.GET)
-    public List<Trip> getRecommended(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
+    public ResponseEntity<List<Trip>> getRecommended(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
     {
-
-//        String id = tokenVerifier.verifyToken(body.getIdToken());
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return tripDao.getRecommended();
+            return ResponseEntity.ok(tripDao.getRecommended());
         }
-        //TODO handle auth failure
-        return null;
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public void saveNewTrip(@RequestBody TripJsonWrapper body )
+    public ResponseEntity saveNewTrip(@RequestBody TripJsonWrapper body )
     {
         String id = tokenVerifier.verifyToken(body.getIdToken());
         if(!id.isEmpty())
         {
             tripDao.saveNewTrip(body.getTrip(),id);
+            return ResponseEntity.ok(null);
         }
-        //TODO handle auth failure
-
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
+
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public void UpdateTrip(@RequestBody TripJsonWrapper body)
+    public ResponseEntity UpdateTrip(@RequestBody TripJsonWrapper body)
     {
         String id = tokenVerifier.verifyToken(body.getIdToken());
         if(!id.isEmpty())
         {
             tripDao.updateTrip(body.getTrip());
+            return ResponseEntity.ok(null);
         }
-        //TODO handle auth failure
-
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 
     @RequestMapping(value = "/addFavorite", method = RequestMethod.PUT)
-    public void AddTripToFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+    public ResponseEntity AddTripToFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
                                    @RequestParam(value = "tripID") int tripID)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
             tripDao.addToFavorites(tripID,id);
+            return ResponseEntity.ok(null);
         }
-        //TODO handle auth failure
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 
     @RequestMapping(value = "/removeFavorite", method = RequestMethod.DELETE)
-    public void RemoveTripFromFavorite(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+    public ResponseEntity RemoveTripFromFavorite(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
                                        @RequestParam(value = "tripID") int tripID)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
             tripDao.removeFromFavorites(tripID,id);
+            return ResponseEntity.ok(null);
         }
-        //TODO handle auth failure
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-
 
 
     @RequestMapping(value = "/checkFavorite", method = RequestMethod.GET)
@@ -138,6 +137,5 @@ public class TripController
         }
         return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
-
 
 }

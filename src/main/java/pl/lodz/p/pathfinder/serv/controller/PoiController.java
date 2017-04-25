@@ -33,64 +33,66 @@ public class PoiController
 
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public Set<PointOfInterest> getAllByUser(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
+    public ResponseEntity<Set<PointOfInterest>> getAllByUser(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return poiDao.getAllByUser(id);
+            return ResponseEntity.ok(poiDao.getAllByUser(id));
         }
-        //TODO handle auth failure
-        return null;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
+
     @RequestMapping(value = "/favorites", method = RequestMethod.GET)
-    public Set<PointOfInterest> getUserFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
+    public ResponseEntity<Set<PointOfInterest>> getUserFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return poiDao.getUserFavorites(id);
+            return ResponseEntity.ok(poiDao.getUserFavorites(id));
         }
-        //TODO handle auth failure
-        return null;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 
     @RequestMapping(value = "/addFavorite", method = RequestMethod.POST)
-    public void addPoiToFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+    public ResponseEntity addPoiToFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
                                    @RequestParam(value = "poiGoogleId") String poiGoogleId)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
             poiDao.addToFavorites(poiGoogleId,id);
+            return ResponseEntity.ok(null);
         }
-        //TODO handle auth failure
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 
     @RequestMapping(value = "/removeFavorite", method = RequestMethod.DELETE)
-    public void removePoiFromFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+    public ResponseEntity removePoiFromFavorites(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
                                    @RequestParam(value = "poiGoogleId") String poiGoogleId)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
             poiDao.removeFromFavorites(poiGoogleId,id);
+            return ResponseEntity.ok(null);
         }
-        //TODO handle auth failure
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 
     @RequestMapping(value = "/addCreated", method = RequestMethod.POST)
-    public void addPoiToCreated(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+    public ResponseEntity addPoiToCreated(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
                                   @RequestParam(value = "poiGoogleId") String poiGoogleId)
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
             poiDao.addToCreated(poiGoogleId,id);
+            return ResponseEntity.ok(null);
         }
-        //TODO handle auth failure
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
 
