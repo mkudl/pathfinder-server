@@ -30,7 +30,7 @@ public class UserDao
     /**
      * Returns user from database if one exists, creates a new one otherwise
      */
-    public User getUser(String googleID)
+    public synchronized User getUser(String googleID)
     {
         Session session = entityManager.unwrap(Session.class);
 
