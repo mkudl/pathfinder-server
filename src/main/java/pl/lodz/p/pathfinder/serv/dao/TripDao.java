@@ -88,11 +88,6 @@ public class TripDao
         entityManager.persist(trip);
     }
 
-    public void deleteTrip(Trip trip, String userID)
-    {
-        //TODO verify that user is creator (just in case; can't trust frontend)
-        //TODO delete
-    }
 
     /**
      * Update an existing Trip with the new values of its Name, Description and Places
@@ -107,6 +102,22 @@ public class TripDao
         savedTrip.setDescription(trip.getDescription());
         savedTrip.setPlaces(trip.getPlaces());
         entityManager.merge(savedTrip);
+    }
+
+    public void deleteTrip(int tripID, String userID)
+    {
+        Trip trip = entityManager.find(Trip.class,tripID);
+        if(trip.getCreatedByUser().getGoogleID().equals(userID))
+        {
+            for( User user : trip.getFavoritingUsers())
+            {
+                user.getFavoriteTrips().remove(trip);
+            }
+            User u = userDao.getUser(userID);
+            u.getCreatedTrips().remove(trip);
+        } else {
+            throw new SecurityException("Delete method called for user who is not trip's owner");
+        }
     }
 
     public void addToFavorites(int tripID, String userID)

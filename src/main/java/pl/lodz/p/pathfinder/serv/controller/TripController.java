@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by QDL on 2017-04-05.
@@ -85,7 +87,7 @@ public class TripController
 
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity UpdateTrip(@RequestBody TripJsonWrapper body)
+    public ResponseEntity updateTrip(@RequestBody TripJsonWrapper body)
     {
         String id = tokenVerifier.verifyToken(body.getIdToken());
         if(!id.isEmpty())
@@ -138,6 +140,26 @@ public class TripController
             }
             else {
                 return ResponseEntity.ok(Collections.singletonMap("isFavorite",false));
+            }
+        }
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    @RequestMapping(value = "/deleteTrip", method = RequestMethod.DELETE)
+    public ResponseEntity<Map<String,Boolean>> deleteTrip(@RequestParam(value = "idToken", defaultValue = "-1") String idToken,
+                                                                 @RequestParam(value = "tripID") int tripID)
+    {
+        String userID = tokenVerifier.verifyToken(idToken);
+        if(!userID.isEmpty())
+        {
+            try{
+                tripDao.deleteTrip(tripID,userID);
+                return ResponseEntity.ok(null);
+            }
+            catch (SecurityException e)
+            {
+                Logger.getAnonymousLogger().log(Level.WARNING,e.getMessage());
+                return  ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
             }
         }
         return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);

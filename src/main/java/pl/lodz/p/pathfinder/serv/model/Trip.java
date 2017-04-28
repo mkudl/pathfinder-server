@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.List;
-
+import java.util.Set;
 
 
 @Entity
@@ -29,6 +29,10 @@ public class Trip
 //    @Cascade(CascadeType.ALL)
     @JsonIgnore
     private User createdByUser; //Google ID of the user that created this trip
+
+    @ManyToMany(mappedBy = "favoriteTrips")
+    @JsonIgnore
+    private Set<User> favoritingUsers;
 
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -99,5 +103,15 @@ public class Trip
     public void setPlaces(List<String> places)
     {
         this.places = places;
+    }
+
+    public Set<User> getFavoritingUsers()
+    {
+        return favoritingUsers;
+    }
+
+    public void setFavoritingUsers(Set<User> favoritingUsers)
+    {
+        this.favoritingUsers = favoritingUsers;
     }
 }
