@@ -1,16 +1,14 @@
-package pl.lodz.p.pathfinder.serv;
+package pl.lodz.p.pathfinder.serv.dao;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.lodz.p.pathfinder.serv.model.PointOfInterest;
-import pl.lodz.p.pathfinder.serv.model.Trip;
 import pl.lodz.p.pathfinder.serv.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -24,11 +22,16 @@ public class PoiDao
 
 
     @PersistenceContext
+    private
     EntityManager entityManager;
 
-    @Autowired
-    UserDao userDao;
+    private final UserDao userDao;
 
+    @Autowired
+    public PoiDao(UserDao userDao)
+    {
+        this.userDao = userDao;
+    }
 
 
     private Session getSession()
@@ -47,7 +50,7 @@ public class PoiDao
     {
         Session session = entityManager.unwrap(Session.class);
 
-        if(getUserCount(googleID)>0){
+        if(countPointsCreatedByUser(googleID)>0){
             return session.byNaturalId(PointOfInterest.class).using("googleID",googleID).load();
         }
         else
@@ -58,7 +61,7 @@ public class PoiDao
         }
     }
 
-    private int getUserCount(String googleID)
+    private int countPointsCreatedByUser(String googleID)
     {
         Query query = entityManager.unwrap(Session.class).createQuery("select count(p) from PointOfInterest p where p.googleID = :gID");
         query.setParameter("gID",googleID);
@@ -76,7 +79,8 @@ public class PoiDao
 
     public Set<PointOfInterest> getUserFavorites(String userID)
     {
-        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();
+//        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();
+        User u = userDao.getUser(userID);
         return u.getFavoritePois();
     }
 
@@ -88,7 +92,23 @@ public class PoiDao
 
         PointOfInterest poi = getPoi(poiId);
 
-        u.getFavoritePois().add(poi); //TODO check whether hibernate will merge duplicates and persist new pois
+        u.getFavoritePois().add(poi);
+    }
+
+
+    public void removeFromFavorites(String poiId, String userID)
+    {
+        User u = userDao.getUser(userID);
+        PointOfInterest poi = getPoi(poiId);
+        u.getFavoritePois().remove(poi);
+    }
+
+
+    public void addToCreated(String poiId, String userID)
+    {
+        User u = userDao.getUser(userID);
+        PointOfInterest poi = new PointOfInterest(poiId,u);
+        u.getCreatedPois().add(poi);
     }
 
 

@@ -20,7 +20,7 @@ public class User
     private String googleID;
 
     //since user won't be deleted it should be fine to cascade all
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "createdByUser", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "createdByUser", fetch = FetchType.EAGER, orphanRemoval = true)
     @Fetch(FetchMode.SELECT)
     private Set<Trip> createdTrips;
 
