@@ -2,6 +2,7 @@ package pl.lodz.p.pathfinder.serv;
 
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.apache.ApacheHttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.hibernate.SessionFactory;
@@ -32,7 +33,7 @@ public class ProjectConfiguration
     @Bean
     HttpTransport httpTransport()
     {
-        return new ApacheHttpTransport();
+        return new NetHttpTransport();
     }
 
     @Bean
