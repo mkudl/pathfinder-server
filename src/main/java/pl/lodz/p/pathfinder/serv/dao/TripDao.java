@@ -28,19 +28,23 @@ public class TripDao
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final UserDao userDao;
+//    @PersistenceContext
+//    public void setEntityManager(EntityManager entityManager)
+//    {
+//        this.entityManager = entityManager;
+//    }
 
-    @Autowired
-    public TripDao(UserDao userDao)
-    {
-        this.userDao = userDao;
-    }
+//    @Autowired
+//    public TripDao(UserDao userDao)
+//    {
+//        this.userDao = userDao;
+//    }
 
 
-    private Session getSession()
-    {
-        return entityManager.unwrap(Session.class);
-    }
+//    private Session getSession()
+//    {
+//        return entityManager.unwrap(Session.class);
+//    }
 
 
 
@@ -49,42 +53,20 @@ public class TripDao
         return entityManager.find(Trip.class,ID);
     }
 
-    public Set<Trip> getAllByUser(String userID)
-    {
-        User u = userDao.getUser(userID);
-        if(u!=null) return u.getCreatedTrips();
-        else return new HashSet<>();
-    }
 
-    public Set<Trip> getUserFavorites(String userID)
-    {
-        User u = userDao.getUser(userID);
-        return u.getFavoriteTrips();
-    }
+//    /**
+//     * To be used only to persist Trips not yet in db
+//     * @param trip Trip object to be saved in db
+//     */
+//    public void saveNewTrip(Trip trip, String userID)
+//    {
+//        User creator = userDao.getUser(userID);
+//        trip.setCreatedByUser(creator);
+//        entityManager.persist(trip);
+//    }
 
-    /**
-     *
-     * @return A list of recommended Trips, chosen based on an advanced algorithm
-     */
-    public List<Trip> getRecommended()
+    public void save(Trip trip)
     {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Trip> criteriaQuery = cb.createQuery(Trip.class);
-        Root<Trip> root = criteriaQuery.from( Trip.class);
-        criteriaQuery.select(root);
-
-        //an advanced algorithm
-        return entityManager.createQuery(criteriaQuery).setMaxResults(10).getResultList();
-    }
-
-    /**
-     * To be used only to persist Trips not yet in db
-     * @param trip Trip object to be saved in db
-     */
-    public void saveNewTrip(Trip trip, String userID)
-    {
-        User creator = userDao.getUser(userID);
-        trip.setCreatedByUser(creator);
         entityManager.persist(trip);
     }
 
@@ -104,6 +86,7 @@ public class TripDao
         entityManager.merge(savedTrip);
     }
 
+
     public void deleteTrip(int tripID, String userID)
     {
         Trip trip = entityManager.find(Trip.class,tripID);
@@ -113,26 +96,53 @@ public class TripDao
             {
                 user.getFavoriteTrips().remove(trip);
             }
-            User u = userDao.getUser(userID);
+//            User u = userDao.getUser(userID);
+            User u = trip.getCreatedByUser();
             u.getCreatedTrips().remove(trip);
         } else {
             throw new SecurityException("Delete method called for user who is not trip's owner");
         }
     }
 
-    public void addToFavorites(int tripID, String userID)
+
+    /**
+     * @return A list of first Trips that are found, according to no criteria in particular
+     */
+    public List<Trip> getAnyTripList(int amount)
     {
-        User u = userDao.getUser(userID);
-        Trip newFavorite = entityManager.find(Trip.class,tripID);
-        u.getFavoriteTrips().add(newFavorite);
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Trip> criteriaQuery = cb.createQuery(Trip.class);
+        Root<Trip> root = criteriaQuery.from( Trip.class);
+        criteriaQuery.select(root);
+        return entityManager.createQuery(criteriaQuery).setMaxResults(10).getResultList();
     }
 
-    public void removeFromFavorites(int tripID, String userID)
-    {
-        User u = userDao.getUser(userID);
-        Set<Trip> updatedFavorites = u.getFavoriteTrips().stream().filter( t -> t.getId() != tripID ).collect(Collectors.toSet());
-        u.setFavoriteTrips(updatedFavorites);
-    }
 
+//    public void addTripToFavorites(int tripID, String userID)
+//    {
+//        User u = userDao.getUser(userID);
+//        Trip newFavorite = entityManager.find(Trip.class,tripID);
+//        u.getFavoriteTrips().add(newFavorite);
+//    }
+//
+//    public void removeTripFromFavorites(int tripID, String userID)
+//    {
+//        User u = userDao.getUser(userID);
+//        Set<Trip> updatedFavorites = u.getFavoriteTrips().stream().filter( t -> t.getId() != tripID ).collect(Collectors.toSet());
+//        u.setFavoriteTrips(updatedFavorites);
+//    }
+//
+//    public Set<Trip> getAllTripsByUser(String userID)
+//    {
+//        User u = userDao.getUser(userID);
+//        if(u!=null) return u.getCreatedTrips();
+//        else return new HashSet<>();
+//    }
+//
+//    public Set<Trip> getUserFavoriteTrips(String userID)
+//    {
+//        User u = userDao.getUser(userID);
+//        return u.getFavoriteTrips();
+//    }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.pathfinder.serv.TokenVerifier;
 import pl.lodz.p.pathfinder.serv.dao.PoiDao;
 import pl.lodz.p.pathfinder.serv.model.PointOfInterest;
+import pl.lodz.p.pathfinder.serv.service.PoiService;
 
 import java.util.Collections;
 import java.util.Map;
@@ -24,14 +25,16 @@ import java.util.Set;
 public class PoiController
 {
 
-    private final PoiDao poiDao;
+//    private final PoiDao poiDao;
+
+    private final PoiService poiService;
 
     private final TokenVerifier tokenVerifier;
 
     @Autowired
-    public PoiController(PoiDao poiDao, TokenVerifier tokenVerifier)
+    public PoiController(PoiService poiService, TokenVerifier tokenVerifier)
     {
-        this.poiDao = poiDao;
+        this.poiService = poiService;
         this.tokenVerifier = tokenVerifier;
     }
 
@@ -41,7 +44,7 @@ public class PoiController
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return ResponseEntity.ok(poiDao.getAllByUser(id));
+            return ResponseEntity.ok(poiService.getAllPoisByUser(id));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -52,7 +55,7 @@ public class PoiController
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return ResponseEntity.ok(poiDao.getUserFavorites(id));
+            return ResponseEntity.ok(poiService.getUserFavoritePois(id));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -65,7 +68,7 @@ public class PoiController
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            poiDao.addToFavorites(poiGoogleId,id);
+            poiService.addPoiToFavorites(poiGoogleId,id);
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -79,7 +82,7 @@ public class PoiController
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            poiDao.removeFromFavorites(poiGoogleId,id);
+            poiService.removePoiFromFavorites(poiGoogleId,id);
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -93,7 +96,7 @@ public class PoiController
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            poiDao.addToCreated(poiGoogleId,id);
+            poiService.addPoiToCreated(poiGoogleId,id);
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -107,7 +110,7 @@ public class PoiController
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            if (poiDao.getUserFavorites(id).contains(poiDao.getPoi(poiGoogleId)) ){
+            if (poiService.getUserFavoritePois(id).contains(poiService.getPoi(poiGoogleId)) ){
                 //can't return a primitive type and creating a wrapper seems like overkill, so it returns a map
                 return ResponseEntity.ok(Collections.singletonMap("isFavorite",true));
             }
