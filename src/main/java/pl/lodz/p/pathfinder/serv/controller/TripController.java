@@ -10,6 +10,7 @@ import pl.lodz.p.pathfinder.serv.TokenVerifier;
 import pl.lodz.p.pathfinder.serv.dao.TripDao;
 import pl.lodz.p.pathfinder.serv.model.Trip;
 import pl.lodz.p.pathfinder.serv.model.json.TripJsonWrapper;
+import pl.lodz.p.pathfinder.serv.service.TripService;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,15 +29,18 @@ import java.util.logging.Logger;
 public class TripController
 {
 
-    private final TripDao tripDao;
+//    private final TripDao tripDao;
 
     private final TokenVerifier tokenVerifier;
 
+    private final TripService tripService;
+
     @Autowired
-    public TripController(TripDao tripDao, TokenVerifier tokenVerifier)
+    public TripController(TripDao tripDao, TokenVerifier tokenVerifier, TripService tripService)
     {
-        this.tripDao = tripDao;
+//        this.tripDao = tripDao;
         this.tokenVerifier = tokenVerifier;
+        this.tripService = tripService;
     }
 
 
@@ -45,7 +49,8 @@ public class TripController
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return ResponseEntity.ok(tripDao.getAllByUser(id));
+//            return ResponseEntity.ok(tripDao.getAllTripsByUser(id));
+            return ResponseEntity.ok(tripService.getAllTripsByUser(id));
         }
         return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -56,7 +61,7 @@ public class TripController
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return ResponseEntity.ok(tripDao.getUserFavorites(id));
+            return ResponseEntity.ok(tripService.getUserFavoriteTrips(id));
         }
         return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -67,7 +72,7 @@ public class TripController
     {
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty()){
-            return ResponseEntity.ok(tripDao.getRecommended());
+            return ResponseEntity.ok(tripService.getRecommended());
         }
         return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
@@ -79,7 +84,7 @@ public class TripController
         String id = tokenVerifier.verifyToken(body.getIdToken());
         if(!id.isEmpty())
         {
-            tripDao.saveNewTrip(body.getTrip(),id);
+            tripService.saveNewTrip(body.getTrip(),id);
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -92,7 +97,7 @@ public class TripController
         String id = tokenVerifier.verifyToken(body.getIdToken());
         if(!id.isEmpty())
         {
-            tripDao.updateTrip(body.getTrip());
+            tripService.updateTrip(body.getTrip());
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -106,7 +111,7 @@ public class TripController
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            tripDao.addToFavorites(tripID,id);
+            tripService.addTripToFavorites(tripID,id);
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -120,7 +125,7 @@ public class TripController
         String id = tokenVerifier.verifyToken(idToken);
         if(!id.isEmpty())
         {
-            tripDao.removeFromFavorites(tripID,id);
+            tripService.removeTripFromFavorites(tripID,id);
             return ResponseEntity.ok(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -134,7 +139,7 @@ public class TripController
         String userID = tokenVerifier.verifyToken(idToken);
         if(!userID.isEmpty())
         {
-            if (tripDao.getUserFavorites(userID).contains(tripDao.getTrip(tripID)) ){
+            if (tripService.getUserFavoriteTrips(userID).contains(tripService.getTrip(tripID)) ){
                 //can't return a primitive type and creating a wrapper seems like overkill, so it returns a map
                 return ResponseEntity.ok(Collections.singletonMap("isFavorite",true));
             }
@@ -153,7 +158,7 @@ public class TripController
         if(!userID.isEmpty())
         {
             try{
-                tripDao.deleteTrip(tripID,userID);
+                tripService.deleteTrip(tripID,userID);
                 return ResponseEntity.ok(null);
             }
             catch (SecurityException e)
