@@ -73,7 +73,6 @@ public class TripService
     public void addTripToFavorites(int tripID, String userID)
     {
         User u = userDao.getUser(userID);
-//        Trip newFavorite = entityManager.find(Trip.class,tripID);
         Trip newFavorite = tripDao.getTrip(tripID);
         u.getFavoriteTrips().add(newFavorite);
     }

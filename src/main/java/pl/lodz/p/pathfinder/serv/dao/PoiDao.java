@@ -69,47 +69,4 @@ public class PoiDao
     }
 
 
-
-
-//    public Set<PointOfInterest> getAllPoisByUser(String userID)
-//    {
-//        User u = userDao.getUser(userID);
-//        return u.getCreatedPois();
-//    }
-//
-//    public Set<PointOfInterest> getUserFavoritePois(String userID)
-//    {
-////        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();
-//        User u = userDao.getUser(userID);
-//        return u.getFavoritePois();
-//    }
-
-
-
-//    public void addPoiToFavorites(String poiId, String userID)
-//    {
-//        User u = userDao.getUser(userID);
-//
-//        PointOfInterest poi = getPoi(poiId);
-//
-//        u.getFavoritePois().add(poi);
-//    }
-//
-//
-//    public void removePoiFromFavorites(String poiId, String userID)
-//    {
-//        User u = userDao.getUser(userID);
-//        PointOfInterest poi = getPoi(poiId);
-//        u.getFavoritePois().remove(poi);
-//    }
-//
-//
-//    public void addPoiToCreated(String poiId, String userID)
-//    {
-//        User u = userDao.getUser(userID);
-//        PointOfInterest poi = new PointOfInterest(poiId,u);
-//        u.getCreatedPois().add(poi);
-//    }
-
-
 }

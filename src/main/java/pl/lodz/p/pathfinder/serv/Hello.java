@@ -13,10 +13,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 
 
-//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
     @SpringBootApplication
-//@EntityScan(basePackages = {"pl.lodz.p.pathfinder.serv.model","pl.lodz.p.pathfinder.serv"})
-
 public class Hello
 {
     public static void main(String[] args)
