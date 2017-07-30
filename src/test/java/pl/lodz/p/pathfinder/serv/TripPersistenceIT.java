@@ -2,7 +2,6 @@ package pl.lodz.p.pathfinder.serv;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import pl.lodz.p.pathfinder.serv.dao.TripDao;
 import pl.lodz.p.pathfinder.serv.model.Trip;
 import pl.lodz.p.pathfinder.serv.model.User;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -26,13 +24,9 @@ import static org.junit.Assert.*;
 /**
  * Created by QDL on 2017-06-17.
  */
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest(classes = {ProjectConfiguration.class, Hello.class})
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@Rollback(false)
 @Transactional
-//@TestPropertySource(properties = { "spring.datasource.username = ", "spring.datasource.password =" })
 public class TripPersistenceIT
 {
     SessionFactory sessionFactory;
@@ -55,22 +49,6 @@ public class TripPersistenceIT
     @Before
     public void before()
     {
-//        Configuration config = new Configuration();
-//        config.addAnnotatedClass(User.class)
-//                .addAnnotatedClass(Trip.class)
-//                .addAnnotatedClass(PointOfInterest.class);
-//        config.setProperty("hibernate.dialect",
-//                "org.hibernate.dialect.H2Dialect");
-//        config.setProperty("hibernate.connection.driver_class",
-//                "org.h2.Driver");
-//        config.setProperty("hibernate.connection.url", "jdbc:h2:~/test");
-//        config.setProperty("hibernate.hbm2ddl.auto", "create");
-
-//        sessionFactory = config.buildSessionFactory();
-//        session = sessionFactory.openSession();
-
-//        tripDao.setEntityManager(session.getEntityManagerFactory().createEntityManager());
-
         creator = new User("testUserID");
         em.persist(creator);
 
@@ -93,7 +71,6 @@ public class TripPersistenceIT
         deleteTripId = deleteTrip.getId();
 
         em.flush();
-
     }
 
     @Test
@@ -108,7 +85,6 @@ public class TripPersistenceIT
 
         Trip result = em.find(Trip.class,t.getId());
         assertNotNull(result);
-//        assertNotNull(em.unwrap(Session.class).byNaturalId(User.class).using("googleId","testUserID"));
         assertEquals(creator.getGoogleID(),result.getCreatedByUser().getGoogleID());
         assertEquals(t.getName(),result.getName());
     }
@@ -156,8 +132,6 @@ public class TripPersistenceIT
         Query query = em.unwrap(Session.class).createQuery("select count(t) from Trip t where t.id = :tID");
         query.setParameter("tID",deleteTripId);
         long result = (long) query.getSingleResult();
-
-
 
         assertEquals(0, result);
     }

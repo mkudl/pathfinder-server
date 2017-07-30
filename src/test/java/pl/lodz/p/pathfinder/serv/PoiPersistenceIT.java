@@ -1,8 +1,6 @@
 package pl.lodz.p.pathfinder.serv;
 
 import org.hibernate.Session;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

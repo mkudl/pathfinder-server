@@ -1,12 +1,10 @@
 package pl.lodz.p.pathfinder.serv;
 
 
-import org.hamcrest.collection.IsCollectionWithSize;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import pl.lodz.p.pathfinder.serv.dao.TripDao;
@@ -14,8 +12,6 @@ import pl.lodz.p.pathfinder.serv.dao.UserDao;
 import pl.lodz.p.pathfinder.serv.model.Trip;
 import pl.lodz.p.pathfinder.serv.model.User;
 import pl.lodz.p.pathfinder.serv.service.TripService;
-
-
 import java.util.HashSet;
 import java.util.Set;
 

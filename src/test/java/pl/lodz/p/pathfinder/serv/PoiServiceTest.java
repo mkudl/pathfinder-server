@@ -1,7 +1,6 @@
 package pl.lodz.p.pathfinder.serv;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -13,16 +12,14 @@ import pl.lodz.p.pathfinder.serv.model.PointOfInterest;
 import pl.lodz.p.pathfinder.serv.model.User;
 import pl.lodz.p.pathfinder.serv.service.PoiService;
 
-
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class PoiServiceTest
