@@ -25,8 +25,6 @@ public class Trip
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
-//    @Fetch(FetchMode.SELECT)
-//    @Cascade(CascadeType.ALL)
     @JsonIgnore
     private User createdByUser; //Google ID of the user that created this trip
 

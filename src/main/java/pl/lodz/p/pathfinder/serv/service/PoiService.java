@@ -41,7 +41,6 @@ public class PoiService
 
     public Set<PointOfInterest> getUserFavoritePois(String userID)
     {
-//        User u = getSession().byNaturalId(User.class).using("googleID",userID).load();
         User u = userDao.getUser(userID);
         return u.getFavoritePois();
     }

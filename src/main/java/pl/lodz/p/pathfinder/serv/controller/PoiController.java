@@ -25,7 +25,6 @@ import java.util.Set;
 public class PoiController
 {
 
-//    private final PoiDao poiDao;
 
     private final PoiService poiService;
 

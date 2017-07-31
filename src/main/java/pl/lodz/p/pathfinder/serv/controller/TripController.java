@@ -29,16 +29,13 @@ import java.util.logging.Logger;
 public class TripController
 {
 
-//    private final TripDao tripDao;
-
     private final TokenVerifier tokenVerifier;
 
     private final TripService tripService;
 
     @Autowired
-    public TripController(TripDao tripDao, TokenVerifier tokenVerifier, TripService tripService)
+    public TripController(TokenVerifier tokenVerifier, TripService tripService)
     {
-//        this.tripDao = tripDao;
         this.tokenVerifier = tokenVerifier;
         this.tripService = tripService;
     }

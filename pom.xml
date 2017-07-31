@@ -88,11 +88,6 @@
             <version>1.22.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.maps.android</groupId>
-            <artifactId>android-maps-utils</artifactId>
-            <version>0.3</version>
-        </dependency>
 
 
         <dependency>
